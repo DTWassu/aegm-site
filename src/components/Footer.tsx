@@ -175,7 +175,7 @@ export default function Footer({ onNavigate }: FooterProps) {
               Gérez votre adhésion de cellule de base, votez en ligne pour les résolutions en Assemblée Générale et accédez à l'espace de formation continue.
             </p>
             <a
-              href="https://acier-bj.bolt.host/"
+              href="https://acier-connect.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-2 w-full justify-center px-4 py-3 text-xs font-bold text-white bg-brand-blue hover:bg-brand-blue-dark rounded-xl transition-all border border-brand-blue-dark/15 shadow-md"
