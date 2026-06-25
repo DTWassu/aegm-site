@@ -173,7 +173,7 @@ export default function ContactPage() {
                 Les enseignants en construction mécanique et métallique peuvent solliciter leur adhésion en ligne. Les demandes sont initiées auprès des Cellules de Base (BCB) de leur établissement puis transmises au Bureau Régional (BR).
               </p>
               <a
-                href="https://acier-bj.bolt.host/"
+                href="https://acier-connect.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center space-x-1.5 text-xs text-brand-blue-accent hover:text-brand-blue-soft font-bold transition-all"
