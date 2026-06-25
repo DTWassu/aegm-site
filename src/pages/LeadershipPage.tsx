@@ -31,6 +31,7 @@ interface BureauMember {
   isCore: boolean;
   email: string;
   telephone: string;
+  photo_url?: string;
 }
 
 interface HistoricalMandate {
@@ -62,6 +63,87 @@ interface MembreFondateur {
   initials: string;
   primaryColor: string;
   categorie?: string;
+}
+
+// Helper Avatar components with error fallback handling
+function BureauMemberAvatar({ member }: { member: BureauMember }) {
+  const [hasError, setHasError] = useState(false);
+
+  if (member.photo_url && !hasError) {
+    return (
+      <div className="relative group-hover:scale-105 transition-transform duration-300">
+        <img
+          src={member.photo_url}
+          alt={member.name}
+          className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md ring-2 ring-brand-blue/20"
+          onError={() => setHasError(true)}
+          referrerPolicy="no-referrer"
+        />
+        {member.isCore && (
+          <span className="absolute bottom-0 right-0 p-1.5 bg-brand-blue text-white rounded-full shadow-md border-2 border-white z-10" title="Membre Clé">
+            <ShieldCheck className="w-3.5 h-3.5" />
+          </span>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`w-20 h-20 rounded-full bg-gradient-to-br ${member.primaryColor} flex items-center justify-center text-white text-2xl font-bold font-display shadow-md tracking-wider group-hover:scale-105 transition-transform duration-300 relative border-4 border-white`}
+    >
+      {member.initials}
+
+      {member.isCore && (
+        <span className="absolute bottom-0 right-0 p-1.5 bg-brand-blue text-white rounded-full shadow-md border-2 border-white" title="Membre Clé">
+          <ShieldCheck className="w-3.5 h-3.5" />
+        </span>
+      )}
+    </div>
+  );
+}
+
+function FounderAvatar({ founder, cat, ringColor }: { founder: MembreFondateur; cat: any; ringColor: string }) {
+  const [hasError, setHasError] = useState(false);
+
+  const badge = (
+    <span className={`absolute -bottom-1 -right-1 p-1 rounded-full shadow-md border-2 border-white z-10 ${
+      cat.code === "bureau_agc" ? "bg-amber-500 text-white" :
+      cat.code === "membre_signataire" ? "bg-blue-50 text-white" :
+      cat.code === "fondateur_simple" ? "bg-emerald-50 text-white" :
+      "bg-purple-50 text-white"
+    }`}>
+      {cat.code === "bureau_agc" ? <Crown className="w-3.5 h-3.5" /> :
+       cat.code === "membre_signataire" ? <Award className="w-3.5 h-3.5" /> :
+       cat.code === "fondateur_simple" ? <Users className="w-3.5 h-3.5" /> :
+       <Star className="w-3.5 h-3.5 fill-white" />
+      }
+    </span>
+  );
+
+  if (founder.photo_url && !hasError) {
+    return (
+      <div className="relative group-hover:scale-105 transition-transform duration-300">
+        <img
+          src={founder.photo_url}
+          alt={`${founder.prenom} ${founder.nom}`}
+          className={`w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg ring-2 ${ringColor}`}
+          onError={() => setHasError(true)}
+          referrerPolicy="no-referrer"
+        />
+        {badge}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`w-24 h-24 rounded-full bg-gradient-to-br ${founder.primaryColor} flex items-center justify-center text-white text-3xl font-extrabold font-display shadow-lg relative border-4 border-white ring-2 ${ringColor} group-hover:scale-105 transition-transform duration-300`}
+    >
+      {founder.initials}
+      {badge}
+    </div>
+  );
 }
 
 // ✅ STATIC FALLBACK - Bureau actuel (utilisé si la table est vide)
@@ -337,7 +419,7 @@ export default function LeadershipPage() {
         // 1. Fetch active members
         const { data: activeData, error: activeError } = await supabase
           .from("bureau")
-          .select("nom, prenom, role_ben, initiales, bio, email, telephone, est_membre_cle, ordre_affichage")
+          .select("nom, prenom, role_ben, initiales, bio, photo_url, email, telephone, est_membre_cle, ordre_affichage")
           .eq("actif", true)
           .order("ordre_affichage", { ascending: true });
 
@@ -366,6 +448,7 @@ export default function LeadershipPage() {
               isCore: item.est_membre_cle || false,
               email: item.email || "aegmb2025@yahoo.com",
               telephone: item.telephone || "+2290197884134",
+              photo_url: item.photo_url || "",
             };
           });
           setMembers(formattedActive);
@@ -643,17 +726,7 @@ export default function LeadershipPage() {
                     <div>
                       {/* Avatar Badge */}
                       <div className="flex justify-center mb-6 relative">
-                        <div
-                          className={`w-20 h-20 rounded-full bg-gradient-to-br ${member.primaryColor} flex items-center justify-center text-white text-2xl font-bold font-display shadow-md tracking-wider group-hover:scale-105 transition-transform duration-300 relative border-4 border-white`}
-                        >
-                          {member.initials}
-
-                          {member.isCore && (
-                            <span className="absolute bottom-0 right-0 p-1.5 bg-brand-blue text-white rounded-full shadow-md border-2 border-white" title="Membre Clé">
-                              <ShieldCheck className="w-3.5 h-3.5" />
-                            </span>
-                          )}
-                        </div>
+                        <BureauMemberAvatar member={member} />
                       </div>
 
                       {/* Position & Identity */}
@@ -950,23 +1023,7 @@ export default function LeadershipPage() {
                               {/* Avatar Display */}
                               <div className="flex flex-col items-center">
                                 <div className="flex justify-center mb-4 relative">
-                                  <div
-                                    className={`w-24 h-24 rounded-full bg-gradient-to-br ${founder.primaryColor} flex items-center justify-center text-white text-3xl font-bold font-display shadow-lg tracking-wider group-hover:scale-105 transition-transform duration-300 relative border-4 border-white ring-2 ${ringColor}`}
-                                  >
-                                    {founder.initials}
-                                    <span className={`absolute -bottom-1 -right-1 p-1 rounded-full shadow-md border-2 border-white ${
-                                      cat.code === "bureau_agc" ? "bg-amber-500 text-white" :
-                                      cat.code === "membre_signataire" ? "bg-blue-50 text-white" :
-                                      cat.code === "fondateur_simple" ? "bg-emerald-50 text-white" :
-                                      "bg-purple-50 text-white"
-                                    }`}>
-                                      {cat.code === "bureau_agc" ? <Crown className="w-3.5 h-3.5" /> :
-                                       cat.code === "membre_signataire" ? <Award className="w-3.5 h-3.5" /> :
-                                       cat.code === "fondateur_simple" ? <Users className="w-3.5 h-3.5" /> :
-                                       <Star className="w-3.5 h-3.5 fill-white" />
-                                      }
-                                    </span>
-                                  </div>
+                                  <FounderAvatar founder={founder} cat={cat} ringColor={ringColor} />
                                 </div>
 
                                 {/* Role & Identity */}
