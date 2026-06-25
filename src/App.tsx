@@ -38,7 +38,7 @@ export default function App() {
       }
       if (target && target.tagName === "A") {
         const href = target.getAttribute("href");
-        if (href && href.startsWith("https://acier-bj.bolt.host")) {
+        if (href && (href.startsWith("https://acier-bj.bolt.host") || href.startsWith("https://acier-connect.vercel.app"))) {
           e.preventDefault();
           setRedirectUrl(href);
           setTimeout(() => {
