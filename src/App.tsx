@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import RedirectTransition from "./components/RedirectTransition";
+import { supabase } from "./lib/supabase";
 
 // Pages
 import Home from "./pages/Home";
@@ -18,6 +19,35 @@ export default function App() {
   });
 
   const [redirectUrl, setRedirectUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function trackVisit() {
+      try {
+        let sessionId = sessionStorage.getItem("aegm_session_id");
+        if (!sessionId) {
+          sessionId = "sess_" + Math.random().toString(36).substring(2, 15);
+          sessionStorage.setItem("aegm_session_id", sessionId);
+        }
+
+        const pagePath = `/${currentPage}`;
+
+        // Attempt to insert into 'visites' table
+        const { error } = await supabase
+          .from("visites")
+          .insert([{
+            session_id: sessionId,
+            page_path: pagePath,
+          }]);
+
+        if (error) {
+          console.warn("Visitor tracking is pending setup on the database side (policy or permissions). Error:", error.message);
+        }
+      } catch (err) {
+        console.warn("Visitor tracking exception:", err);
+      }
+    }
+    trackVisit();
+  }, [currentPage]);
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -85,7 +115,7 @@ export default function App() {
       <Header currentPage={currentPage} onNavigate={navigateTo} />
 
       {/* Main Pages Container */}
-      <main className="flex-grow pt-16">
+      <main className="flex-grow pt-28 md:pt-32">
         <div className="relative">
           {renderActivePage()}
         </div>
