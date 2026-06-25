@@ -1,14 +1,37 @@
 import { useState, useEffect } from "react";
-import { Menu, X, ExternalLink } from "lucide-react";
+import { Menu, X, ExternalLink, Sparkles, CreditCard, Coins } from "lucide-react";
+import { supabase } from "../lib/supabase";
 
 interface HeaderProps {
   currentPage: string;
   onNavigate: (page: string) => void;
 }
 
+const DEFAULT_NOTIFICATIONS = [
+  {
+    id: "default-1",
+    type: "uv_2026",
+    title: "Cap sur Natitingou 2026",
+    message: "L'édition 2026 des Universités de Vacances se tiendra à Natitingou du 25 au 29 août 2026."
+  },
+  {
+    id: "default-2",
+    type: "frais_participation",
+    title: "Inscription UV 2026",
+    message: "Pensez à régulariser vos frais de participation (20 000 FCFA) pour valider votre inscription. Date limite : 31 juillet 2026."
+  },
+  {
+    id: "default-3",
+    type: "cotisation_annuelle",
+    title: "Cotisations Annuelles 2025-2026",
+    message: "Les cotisations annuelles obligatoires pour l'exercice 2025-2026 s'élèvent à 12 000 FCFA (soit 1 000 FCFA par mois)."
+  }
+];
+
 export default function Header({ currentPage, onNavigate }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [announcements, setAnnouncements] = useState<any[]>([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,6 +39,29 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    async function fetchAnnouncements() {
+      try {
+        const { data, error } = await supabase
+          .from("annonces_publiques")
+          .select("id, type, title, message")
+          .eq("actif", true)
+          .order("priorite", { ascending: false })
+          .order("created_at", { ascending: false });
+
+        if (data && data.length > 0 && !error) {
+          setAnnouncements(data);
+        } else {
+          setAnnouncements(DEFAULT_NOTIFICATIONS);
+        }
+      } catch (err) {
+        console.warn("Could not retrieve announcements in Header ticker, using defaults:", err);
+        setAnnouncements(DEFAULT_NOTIFICATIONS);
+      }
+    }
+    fetchAnnouncements();
   }, []);
 
   const navLinks = [
@@ -31,11 +77,82 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-white/95 backdrop-blur-md shadow-sm py-3.5 border-b border-acier-200"
-          : "bg-white/70 backdrop-blur-sm py-5 border-b border-acier-100"
+          ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-acier-200"
+          : "bg-white/75 backdrop-blur-sm border-b border-acier-100"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Persistent Elegant Announcement Ticker Bar */}
+      <div className="bg-gradient-to-r from-brand-blue-deep via-brand-blue to-brand-blue-deep text-white border-b border-white/10 py-2.5 overflow-hidden relative select-none">
+        <div className="flex whitespace-nowrap animate-marquee animate-marquee-hover-pause">
+          {/* First track copy */}
+          <div className="flex items-center space-x-16 pr-16 shrink-0">
+            {announcements.map((ann, idx) => {
+              const isUV = ann.type === "uv_2026";
+              const isFrais = ann.type === "frais_participation";
+              
+              let IconComponent = Coins;
+              let badgeColor = "bg-emerald-500/20 text-emerald-300 border-emerald-500/30";
+              let badgeLabel = "Cotisation";
+
+              if (isUV) {
+                IconComponent = Sparkles;
+                badgeColor = "bg-blue-500/20 text-blue-300 border-blue-500/30";
+                badgeLabel = "UV 2026";
+              } else if (isFrais) {
+                IconComponent = CreditCard;
+                badgeColor = "bg-amber-500/20 text-amber-300 border-amber-500/30";
+                badgeLabel = "Inscription";
+              }
+
+              return (
+                <span key={`${ann.id}-${idx}`} className="inline-flex items-center space-x-2 text-xs font-sans">
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider border ${badgeColor}`}>
+                    <IconComponent className="w-3 h-3 mr-1" />
+                    {badgeLabel}
+                  </span>
+                  <strong className="font-bold text-white/95">{ann.title} :</strong>
+                  <span className="text-white/90 font-light">{ann.message}</span>
+                </span>
+              );
+            })}
+          </div>
+
+          {/* Second track copy for infinite seamless loop */}
+          <div className="flex items-center space-x-16 pr-16 shrink-0" aria-hidden="true">
+            {announcements.map((ann, idx) => {
+              const isUV = ann.type === "uv_2026";
+              const isFrais = ann.type === "frais_participation";
+              
+              let IconComponent = Coins;
+              let badgeColor = "bg-emerald-500/20 text-emerald-300 border-emerald-500/30";
+              let badgeLabel = "Cotisation";
+
+              if (isUV) {
+                IconComponent = Sparkles;
+                badgeColor = "bg-blue-500/20 text-blue-300 border-blue-500/30";
+                badgeLabel = "UV 2026";
+              } else if (isFrais) {
+                IconComponent = CreditCard;
+                badgeColor = "bg-amber-500/20 text-amber-300 border-amber-500/30";
+                badgeLabel = "Inscription";
+              }
+
+              return (
+                <span key={`dup-${ann.id}-${idx}`} className="inline-flex items-center space-x-2 text-xs font-sans">
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider border ${badgeColor}`}>
+                    <IconComponent className="w-3 h-3 mr-1" />
+                    {badgeLabel}
+                  </span>
+                  <strong className="font-bold text-white/95">{ann.title} :</strong>
+                  <span className="text-white/90 font-light">{ann.message}</span>
+                </span>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 ${isScrolled ? "py-3" : "py-4.5"}`}>
         <div className="flex justify-between items-center">
           {/* Logo */}
           <button
@@ -122,9 +239,9 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer - dynamically floating exactly underneath the Header bottom border */}
       <div
-        className={`md:hidden fixed inset-x-0 top-[65px] bg-white border-b border-acier-200 shadow-xl transition-all duration-300 ease-in-out ${
+        className={`md:hidden absolute inset-x-0 top-full bg-white border-b border-acier-200 shadow-xl transition-all duration-300 ease-in-out ${
           isOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
         }`}
       >
