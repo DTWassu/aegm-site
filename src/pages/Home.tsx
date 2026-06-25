@@ -79,7 +79,7 @@ export default function Home({ onNavigate }: HomeProps) {
           {/* Action buttons with the exact blue from ACIER portal */}
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4 max-w-md mx-auto">
             <a
-              href="https://acier-bj.bolt.host/"
+              href="https://acier-connect.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
               className="w-full sm:w-auto inline-flex items-center justify-center space-x-2.5 px-8 py-4 rounded-xl text-base font-bold text-white bg-brand-blue hover:bg-brand-blue-dark shadow-lg shadow-brand-blue/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border border-brand-blue-dark/10 group"
@@ -169,7 +169,7 @@ export default function Home({ onNavigate }: HomeProps) {
               </div>
 
               <a
-                href="https://acier-bj.bolt.host/"
+                href="https://acier-connect.vercel.app/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full inline-flex items-center justify-center space-x-2 px-6 py-3.5 rounded-xl text-sm font-bold text-brand-blue bg-white hover:bg-brand-blue-soft shadow-lg transition-all duration-200"
