@@ -97,7 +97,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
           {/* Portal Button matching ACIER portal blue login button */}
           <div className="hidden md:block">
             <a
-              href="https://acier-bj.bolt.host/"
+              href="https://acier-connect.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-brand-blue hover:bg-brand-blue-dark shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 border border-brand-blue-dark/10 group"
@@ -150,7 +150,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
           })}
           <div className="pt-4 border-t border-acier-100">
             <a
-              href="https://acier-bj.bolt.host/"
+              href="https://acier-connect.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
               className="flex justify-center items-center space-x-2 w-full py-4 px-4 rounded-xl text-sm font-bold text-white bg-brand-blue hover:bg-brand-blue-dark shadow-md"
