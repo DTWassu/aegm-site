@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Calendar, MapPin, Clock, Users, ArrowRight, ExternalLink, Image as ImageIcon, Sparkles, BookOpen, MessageSquare, ChevronRight, History } from "lucide-react";
+import { Calendar, MapPin, Clock, Users, ArrowRight, ExternalLink, Image as ImageIcon, Sparkles, BookOpen, MessageSquare, ChevronRight, History, LayoutGrid, Grid2x2, List, ChevronLeft } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { supabase } from "../lib/supabase";
 
@@ -24,6 +24,12 @@ export default function UVPage() {
   const [editions, setEditions] = useState<any[]>([]);
   const [galleryMap, setGalleryMap] = useState<Record<string, any[]>>({});
   const [loading, setLoading] = useState(true);
+  const [galleryPage, setGalleryPage] = useState(1);
+  const [displayMode, setDisplayMode] = useState<"grid" | "compact" | "list">("grid");
+
+  useEffect(() => {
+    setGalleryPage(1);
+  }, [activeEdition]);
 
   useEffect(() => {
     async function fetchUVData() {
@@ -141,20 +147,128 @@ export default function UVPage() {
       id: "gal-1",
       title: "Cérémonie Constitutive d'Akassato",
       tag: "Congrès",
-      desc: "Adoption solennelle des statuts de l'AEGM-BÉNIN.",
+      desc: "Adoption solennelle des statuts de l'AEGM-BÉNIN lors du lancement officiel.",
+      photo_url: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=600&q=80"
     },
     {
       id: "gal-2",
       title: "Membres Fondateurs réunis",
       tag: "Bureau",
-      desc: "Photo officielle du Bureau Exécutif National d'Akassato.",
+      desc: "Photo officielle du Bureau Exécutif National d'Akassato élu à l'unanimité.",
+      photo_url: "https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=600&q=80"
     },
     {
       id: "gal-3",
       title: "Atelier de Construction Métallique",
-      tag: "Pédagogique",
-      desc: "Présentation des prototypes d'enseignement en atelier.",
+      tag: "Technique",
+      desc: "Démonstrations de soudage à l'arc et de pliage de tôles d'acier.",
+      photo_url: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80"
     },
+    {
+      id: "gal-4",
+      title: "Travaux d'Harmonisation Pédagogique",
+      tag: "Atelier",
+      desc: "Débats constructifs sur les référentiels de formation professionnelle au Bénin.",
+      photo_url: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: "gal-5",
+      title: "Session Plénière d'Ouverture",
+      tag: "Congrès",
+      desc: "Allocution inspirante du doyen d'âge ouvrant les assises nationales.",
+      photo_url: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: "gal-6",
+      title: "Démonstration Didactique",
+      tag: "Enseignement",
+      desc: "Présentation de maquettes et de mécanismes d'usinage innovants.",
+      photo_url: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: "gal-7",
+      title: "Visite Guidée des Ateliers",
+      tag: "Visite",
+      desc: "Exploration guidée des équipements techniques modernes de l'établissement d'accueil.",
+      photo_url: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: "gal-8",
+      title: "Examen des Textes Fondateurs",
+      tag: "Statuts",
+      desc: "Relecture participative de la charte fondamentale de l'association.",
+      photo_url: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: "gal-9",
+      title: "Réseautage et Échanges",
+      tag: "Fraternité",
+      desc: "Création de liens forts entre collègues venus des douze départements du Bénin.",
+      photo_url: "https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: "gal-10",
+      title: "Opérations de Vote Démocratique",
+      tag: "Démocratie",
+      desc: "Déroulement transparent du scrutin pour l'élection du Bureau National.",
+      photo_url: "https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: "gal-11",
+      title: "Discours du Président Élu",
+      tag: "Bureau",
+      desc: "Présentation de la feuille de route du président pour le mandat 2025-2028.",
+      photo_url: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: "gal-12",
+      title: "Remise des Certificats de Participation",
+      tag: "Cérémonie",
+      desc: "Valorisation de l'engagement des congressistes à cette session constitutive.",
+      photo_url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: "gal-13",
+      title: "Photo de Famille d'Akassato",
+      tag: "Souvenir",
+      desc: "Les congressistes immortalisent la réussite de cette première historique.",
+      photo_url: "https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: "gal-14",
+      title: "Usinage et Commandes Numériques",
+      tag: "Technique",
+      desc: "Partage de compétences de pointe en programmation de machines.",
+      photo_url: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: "gal-15",
+      title: "Atelier de DAO - CAO",
+      tag: "Conception",
+      desc: "Harmonisation sur l'usage des logiciels de modélisation 3D industrielle.",
+      photo_url: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: "gal-16",
+      title: "Intégration et Parrainage",
+      tag: "Solidarité",
+      desc: "Accueil chaleureux des nouveaux enseignants diplômés de l'École Normale.",
+      photo_url: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: "gal-17",
+      title: "Coordination des Cellules de Base",
+      tag: "Atelier",
+      desc: "Structuration et mise en place des plans d'action locaux de l'association.",
+      photo_url: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=600&q=80"
+    },
+    {
+      id: "gal-18",
+      title: "Cocktail de Naissance Solennelle",
+      tag: "Clôture",
+      desc: "Célébration conviviale de l'officialisation de l'AEGM-BÉNIN.",
+      photo_url: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=600&q=80"
+    }
   ];
 
   const fallbackAllEditions = [
@@ -285,6 +399,14 @@ export default function UVPage() {
       photo_url: photo.photo_url,
     }));
   }
+
+  // Pagination and Display calculations
+  const itemsPerPage = 12;
+  const totalItems = galleryToRender.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const indexOfLastItem = galleryPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentGalleryItems = galleryToRender.slice(indexOfFirstItem, indexOfLastItem);
 
 
   return (
@@ -593,23 +715,121 @@ export default function UVPage() {
                 </div>
               </div>
 
-              {/* Photo Retrospective Gallery Placeholder */}
-              <div className="space-y-4">
-                <div className="flex items-center space-x-2">
-                  <ImageIcon className="w-5 h-5 text-brand-blue" />
-                  <h3 className="text-lg font-bold font-display text-acier-900">
-                    Galerie photo & moments forts d'Akassato
-                  </h3>
+              {/* Photo Retrospective Gallery */}
+              <div className="space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-acier-100">
+                  <div className="flex items-center space-x-2">
+                    <ImageIcon className="w-5 h-5 text-brand-blue" />
+                    <div>
+                      <h3 className="text-lg font-bold font-display text-acier-900">
+                        Galerie photo & moments forts d'Akassato
+                      </h3>
+                      <p className="text-xs text-acier-500 font-light mt-0.5">
+                        {totalItems} photos • Page {galleryPage} sur {totalPages}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Display Mode Toggle */}
+                  <div className="flex items-center space-x-3 self-end sm:self-auto">
+                    <span className="text-xs font-medium text-acier-500 hidden sm:inline">Affichage :</span>
+                    <div className="inline-flex rounded-xl bg-acier-100 p-1 border border-acier-200/40">
+                      <button
+                        onClick={() => setDisplayMode("grid")}
+                        className={`inline-flex items-center justify-center p-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                          displayMode === "grid"
+                            ? "bg-white text-brand-blue shadow-sm"
+                            : "text-acier-600 hover:text-acier-900"
+                        }`}
+                        title="Grille classique"
+                      >
+                        <LayoutGrid className="w-4 h-4 mr-1.5" />
+                        <span>Grille</span>
+                      </button>
+                      <button
+                        onClick={() => setDisplayMode("compact")}
+                        className={`inline-flex items-center justify-center p-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                          displayMode === "compact"
+                            ? "bg-white text-brand-blue shadow-sm"
+                            : "text-acier-600 hover:text-acier-900"
+                        }`}
+                        title="Mosaïque compacte"
+                      >
+                        <Grid2x2 className="w-4 h-4 mr-1.5" />
+                        <span>Mosaïque</span>
+                      </button>
+                      <button
+                        onClick={() => setDisplayMode("list")}
+                        className={`inline-flex items-center justify-center p-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                          displayMode === "list"
+                            ? "bg-white text-brand-blue shadow-sm"
+                            : "text-acier-600 hover:text-acier-900"
+                        }`}
+                        title="Liste détaillée"
+                      >
+                        <List className="w-4 h-4 mr-1.5" />
+                        <span>Liste</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {galleryToRender.map((gal) => (
-                    <div
-                      key={gal.id}
-                      className="bg-white rounded-xl border border-acier-200 overflow-hidden shadow-sm group hover:shadow-md transition-all duration-300"
-                    >
-                      {/* Beautiful photos or conceptual vector graphics since we don't have real photos */}
-                      <div className="h-44 bg-gradient-to-br from-brand-blue-soft to-acier-100 flex items-center justify-center border-b border-acier-100 relative overflow-hidden">
+                {/* Gallery Items container based on selected Display Mode */}
+                {displayMode === "grid" && (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in">
+                    {currentGalleryItems.map((gal) => (
+                      <div
+                        key={gal.id}
+                        className="bg-white rounded-xl border border-acier-200 overflow-hidden shadow-sm group hover:shadow-md transition-all duration-300"
+                      >
+                        <div className="h-44 bg-gradient-to-br from-brand-blue-soft to-acier-100 flex items-center justify-center border-b border-acier-100 relative overflow-hidden">
+                          {gal.photo_url ? (
+                            <img
+                              src={gal.photo_url}
+                              alt={gal.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300"
+                              referrerPolicy="no-referrer"
+                            />
+                          ) : (
+                            <>
+                              <div className="absolute inset-0 bg-[linear-gradient(to_right,#3b82f608_1px,transparent_1px),linear-gradient(to_bottom,#3b82f608_1px,transparent_1px)] bg-[size:1.5rem_1.5rem]" />
+                              <svg
+                                className="w-10 h-10 text-brand-blue opacity-40 group-hover:scale-110 group-hover:opacity-60 transition-all duration-300"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                              >
+                                <circle cx="12" cy="12" r="3" />
+                                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                              </svg>
+                            </>
+                          )}
+                          <span className="absolute bottom-3 left-3 px-2 py-0.5 rounded bg-white text-acier-800 text-[9px] font-bold font-mono uppercase shadow-sm border border-acier-100">
+                            {gal.tag}
+                          </span>
+                        </div>
+
+                        <div className="p-5 space-y-2">
+                          <h4 className="text-sm font-bold text-acier-900 font-display">
+                            {gal.title}
+                          </h4>
+                          <p className="text-xs text-acier-500 font-light leading-relaxed">
+                            {gal.desc}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {displayMode === "compact" && (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 animate-fade-in">
+                    {currentGalleryItems.map((gal) => (
+                      <div
+                        key={gal.id}
+                        className="bg-white rounded-xl border border-acier-200 overflow-hidden shadow-sm group hover:shadow-md transition-all duration-300 relative aspect-square"
+                      >
                         {gal.photo_url ? (
                           <img
                             src={gal.photo_url}
@@ -618,36 +838,110 @@ export default function UVPage() {
                             referrerPolicy="no-referrer"
                           />
                         ) : (
-                          <>
-                            <div className="absolute inset-0 bg-[linear-gradient(to_right,#3b82f608_1px,transparent_1px),linear-gradient(to_bottom,#3b82f608_1px,transparent_1px)] bg-[size:1.5rem_1.5rem]" />
-                            <svg
-                              className="w-10 h-10 text-brand-blue opacity-40 group-hover:scale-110 group-hover:opacity-60 transition-all duration-300"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                            >
-                              <circle cx="12" cy="12" r="3" />
-                              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
-                            </svg>
-                          </>
+                          <div className="w-full h-full bg-gradient-to-br from-brand-blue-soft to-acier-100 flex items-center justify-center">
+                            <ImageIcon className="w-8 h-8 text-brand-blue opacity-30" />
+                          </div>
                         )}
-                        <span className="absolute bottom-3 left-3 px-2 py-0.5 rounded bg-white text-acier-800 text-[9px] font-bold font-mono uppercase shadow-sm">
+                        
+                        {/* Hover Overlay with text */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-acier-950/90 via-acier-950/50 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 p-4 flex flex-col justify-end space-y-1 text-white">
+                          <span className="self-start px-2 py-0.5 rounded bg-brand-blue text-[8px] font-bold font-mono uppercase">
+                            {gal.tag}
+                          </span>
+                          <h4 className="text-xs font-bold font-display line-clamp-1">
+                            {gal.title}
+                          </h4>
+                          <p className="text-[10px] text-acier-300 font-light line-clamp-2 leading-tight">
+                            {gal.desc}
+                          </p>
+                        </div>
+
+                        {/* Always visible minimal tag */}
+                        <span className="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-white/90 backdrop-blur-sm text-acier-800 text-[8px] font-bold font-mono uppercase group-hover:opacity-0 transition-opacity">
                           {gal.tag}
                         </span>
                       </div>
+                    ))}
+                  </div>
+                )}
 
-                      <div className="p-5 space-y-2">
-                        <h4 className="text-sm font-bold text-acier-900 font-display">
-                          {gal.title}
-                        </h4>
-                        <p className="text-xs text-acier-500 font-light leading-relaxed">
-                          {gal.desc}
-                        </p>
+                {displayMode === "list" && (
+                  <div className="flex flex-col gap-4 animate-fade-in">
+                    {currentGalleryItems.map((gal) => (
+                      <div
+                        key={gal.id}
+                        className="bg-white rounded-xl border border-acier-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col sm:flex-row"
+                      >
+                        <div className="w-full sm:w-48 h-36 bg-gradient-to-br from-brand-blue-soft to-acier-100 flex items-center justify-center shrink-0 relative overflow-hidden">
+                          {gal.photo_url ? (
+                            <img
+                              src={gal.photo_url}
+                              alt={gal.title}
+                              className="w-full h-full object-cover"
+                              referrerPolicy="no-referrer"
+                            />
+                          ) : (
+                            <ImageIcon className="w-8 h-8 text-brand-blue opacity-30" />
+                          )}
+                          <span className="absolute top-3 left-3 px-2 py-0.5 rounded bg-white text-acier-800 text-[9px] font-bold font-mono uppercase shadow-sm border border-acier-100">
+                            {gal.tag}
+                          </span>
+                        </div>
+
+                        <div className="p-5 flex flex-col justify-center space-y-2 flex-1">
+                          <div className="flex items-center space-x-2">
+                            <span className="px-2 py-0.5 rounded bg-brand-blue-light text-brand-blue text-[9px] font-bold font-mono uppercase">
+                              {gal.tag}
+                            </span>
+                            <h4 className="text-sm sm:text-base font-bold text-acier-900 font-display">
+                              {gal.title}
+                            </h4>
+                          </div>
+                          <p className="text-xs sm:text-sm text-acier-600 font-light leading-relaxed">
+                            {gal.desc}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center space-x-2 pt-6 border-t border-acier-100">
+                    <button
+                      onClick={() => setGalleryPage((prev) => Math.max(prev - 1, 1))}
+                      disabled={galleryPage === 1}
+                      className="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-acier-200 bg-white text-acier-600 hover:text-acier-900 hover:bg-acier-50 disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-acier-600 transition-all cursor-pointer disabled:cursor-not-allowed"
+                      title="Page précédente"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                      <button
+                        key={p}
+                        onClick={() => setGalleryPage(p)}
+                        className={`inline-flex items-center justify-center w-9 h-9 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                          galleryPage === p
+                            ? "bg-brand-blue text-white shadow-sm shadow-brand-blue/20"
+                            : "border border-acier-200 bg-white text-acier-600 hover:bg-acier-50 hover:text-acier-900"
+                        }`}
+                      >
+                        {p}
+                      </button>
+                    ))}
+
+                    <button
+                      onClick={() => setGalleryPage((prev) => Math.min(prev + 1, totalPages))}
+                      disabled={galleryPage === totalPages}
+                      className="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-acier-200 bg-white text-acier-600 hover:text-acier-900 hover:bg-acier-50 disabled:opacity-40 disabled:hover:bg-white disabled:hover:text-acier-600 transition-all cursor-pointer disabled:cursor-not-allowed"
+                      title="Page suivante"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
               </div>
             </motion.div>
           ) : (
