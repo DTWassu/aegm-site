@@ -1,0 +1,6 @@
+{
+  "name": "AEGM - BÉNIN",
+  "description": "Site officiel de l'Association des Enseignants de Génie Mécanique du Bénin. Solides comme l'ACIER, unis pour la mécanique.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
