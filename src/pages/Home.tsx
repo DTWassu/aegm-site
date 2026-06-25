@@ -226,6 +226,67 @@ export default function Home({ onNavigate }: HomeProps) {
         </div>
       </section>
 
+      {/* Partners Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-acier-50/50 rounded-3xl border border-acier-200/60 p-8 sm:p-12 space-y-10">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div className="space-y-2">
+              <span className="inline-flex items-center space-x-1 px-2.5 py-1 rounded bg-brand-blue-light text-brand-blue text-[10px] font-bold font-mono tracking-wider uppercase">
+                Réseau & Synergie Institutionnelle
+              </span>
+              <h2 className="text-2xl sm:text-3xl font-bold font-display text-acier-900 leading-tight">
+                Les Partenaires Officiels
+              </h2>
+              <p className="text-sm text-acier-600 font-light max-w-2xl">
+                L'AEGM-BÉNIN collabore activement avec les instances étatiques et techniques de référence pour garantir l'excellence et l'intégration de la filière de construction mécanique.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto gap-6">
+            <div className="bg-white p-6 rounded-2xl border border-acier-200/80 shadow-sm hover:shadow-md transition-all space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="px-4 h-11 min-w-[80px] rounded-xl bg-gradient-to-br from-brand-blue to-brand-blue-deep flex items-center justify-center text-white font-extrabold text-xs tracking-wider shadow-md shrink-0">
+                  MESTFP
+                </div>
+                <span className="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-brand-blue-light text-brand-blue border border-brand-blue/10">
+                  Secteur Public
+                </span>
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-acier-900 font-display">MESTFP Bénin</h3>
+                <p className="text-[11px] text-brand-blue font-semibold font-mono tracking-wide mt-0.5">
+                  Tutelle Institutionnelle
+                </p>
+              </div>
+              <p className="text-xs text-acier-600 font-light leading-relaxed">
+                Ministère de l'Enseignement Secondaire, Technique et de la Formation Professionnelle du Bénin, assurant la validation pédagogique, la conformité de nos actions de mutualisation et le soutien officiel.
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl border border-acier-200/80 shadow-sm hover:shadow-md transition-all space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="px-4 h-11 min-w-[80px] rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center text-white font-extrabold text-xs tracking-wider shadow-md shrink-0">
+                  ADET
+                </div>
+                <span className="px-2 py-0.5 rounded text-[9px] font-mono font-bold bg-amber-50 text-amber-700 border border-amber-100">
+                  Agence Nationale
+                </span>
+              </div>
+              <div>
+                <h3 className="text-base font-bold text-acier-900 font-display">ADET Bénin</h3>
+                <p className="text-[11px] text-amber-700 font-semibold font-mono tracking-wide mt-0.5">
+                  Développement de l'Enseignement Technique
+                </p>
+              </div>
+              <p className="text-xs text-acier-600 font-light leading-relaxed">
+                Agence de Développement de l'Enseignement Technique, acteur stratégique dédié à la mise en œuvre de la stratégie nationale de l'enseignement technique au Bénin pour une formation professionnelle d'excellence.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Mini-CTA for Statutes */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-2xl border border-acier-200 p-8 sm:p-10 flex flex-col md:flex-row items-center justify-between gap-6">
@@ -239,7 +300,7 @@ export default function Home({ onNavigate }: HomeProps) {
           </div>
           <button
             onClick={() => onNavigate("statutes")}
-            className="flex-shrink-0 inline-flex items-center space-x-2 px-6 py-3.5 rounded-xl text-sm font-bold text-white bg-acier-800 hover:bg-acier-900 transition-colors"
+            className="flex-shrink-0 inline-flex items-center space-x-2 px-6 py-3.5 rounded-xl text-sm font-bold text-white bg-acier-800 hover:bg-acier-900 transition-colors cursor-pointer"
           >
             <span>Lire les Statuts</span>
             <ArrowRight className="w-4 h-4" />
