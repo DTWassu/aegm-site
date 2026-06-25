@@ -489,7 +489,7 @@ export default function UVPage() {
                     L'inscription se fait entièrement en ligne via la plateforme ACIER Connect. Vos identifiants de membre vous permettent d'activer votre participation, réserver l'hébergement et soumettre vos thématiques d'ateliers.
                   </p>
                   <a
-                    href="https://acier-bj.bolt.host/"
+                    href="https://acier-connect.vercel.app/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center space-x-2 px-5 py-3 rounded-xl text-xs font-bold bg-white text-brand-blue hover:bg-brand-blue-soft transition-all w-full justify-center shadow-md"
