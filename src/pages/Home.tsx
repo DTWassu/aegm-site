@@ -28,20 +28,6 @@ const DEFAULT_NOTIFICATIONS = [
   }
 ];
 
-const DEFAULT_STATS = {
-  totalViews: 284,
-  uniqueVisitors: 73,
-  pageBreakdown: {
-    "/home": 118,
-    "/about": 46,
-    "/uv": 51,
-    "/leadership": 34,
-    "/statutes": 23,
-    "/contact": 12
-  },
-  isLive: false
-};
-
 export default function Home({ onNavigate }: HomeProps) {
   const [stats, setStats] = useState({
     total_membres_actifs: 142,
@@ -51,14 +37,6 @@ export default function Home({ onNavigate }: HomeProps) {
 
   const [notifications, setNotifications] = useState<any[]>([]);
   const [loadingNotifications, setLoadingNotifications] = useState(true);
-
-  const [visitStats, setVisitStats] = useState({
-    totalViews: 0,
-    uniqueVisitors: 0,
-    pageBreakdown: {} as Record<string, number>,
-    isLive: false,
-  });
-  const [loadingStats, setLoadingStats] = useState(true);
 
   useEffect(() => {
     async function fetchStats() {
@@ -104,43 +82,8 @@ export default function Home({ onNavigate }: HomeProps) {
       }
     }
 
-    async function fetchVisits() {
-      try {
-        setLoadingStats(true);
-        const { data, error } = await supabase
-          .from("visites")
-          .select("id, session_id, page_path");
-
-        if (data && data.length > 0 && !error) {
-          const totalViews = data.length;
-          const uniqueVisitors = new Set(data.map((v: any) => v.session_id)).size;
-          
-          const pageBreakdown: Record<string, number> = {};
-          data.forEach((v: any) => {
-            const path = v.page_path || "/home";
-            pageBreakdown[path] = (pageBreakdown[path] || 0) + 1;
-          });
-
-          setVisitStats({
-            totalViews,
-            uniqueVisitors,
-            pageBreakdown,
-            isLive: true
-          });
-        } else {
-          setVisitStats(DEFAULT_STATS);
-        }
-      } catch (err) {
-        console.warn("Could not retrieve visit stats, using simulated default:", err);
-        setVisitStats(DEFAULT_STATS);
-      } finally {
-        setLoadingStats(false);
-      }
-    }
-
     fetchStats();
     fetchNotifications();
-    fetchVisits();
   }, []);
 
   return (
@@ -331,7 +274,7 @@ export default function Home({ onNavigate }: HomeProps) {
                         onClick={() => onNavigate("contact")}
                         className="text-[10px] font-bold text-brand-blue hover:underline cursor-pointer"
                       >
-                        Contacter Trésorier
+                        Contacter la Cellule
                       </button>
                     </div>
                   )}
@@ -516,144 +459,10 @@ export default function Home({ onNavigate }: HomeProps) {
                 </p>
               </div>
               <p className="text-xs text-acier-600 font-light leading-relaxed">
-                Agence de Développement de l'Enseignement Technique, acteur stratégique dédié à la mise en œuvre de la stratégie nationale de l'enseignement technique au Bénin pour une formation professionnelle d'excellence.
+                Agence de Développement de l'Enseignement Technique, actor stratégique dédié à la mise en œuvre de la stratégie nationale de l'enseignement technique au Bénin pour une formation professionnelle d'excellence.
               </p>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Real-time Visitor Statistics Dashboard */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-3xl border border-acier-200 p-6 sm:p-10 shadow-sm space-y-8">
-          
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-acier-100">
-            <div className="flex items-center space-x-3">
-              <div className="p-2.5 bg-brand-blue-light text-brand-blue rounded-xl">
-                <Activity className="w-5 h-5 text-brand-blue" />
-              </div>
-              <div>
-                <h2 className="text-xl sm:text-2xl font-bold font-display text-acier-900 tracking-tight">
-                  Observatoire de Fréquentation du Site
-                </h2>
-                <p className="text-xs text-acier-500 font-light mt-0.5">
-                  Statistiques de visites et d'audience des différentes sections du portail officiel de l'AEGM-BÉNIN.
-                </p>
-              </div>
-            </div>
-
-            {/* Live Indicator / Simulation Badge */}
-            <div className="flex items-center shrink-0">
-              {visitStats.isLive ? (
-                <span className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                  <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                  <span>🟢 PRODUCTION LIVE</span>
-                </span>
-              ) : (
-                <div className="flex flex-col items-end">
-                  <span className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-full text-xs font-mono font-bold bg-amber-50 text-amber-700 border border-amber-200">
-                    <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
-                    <span>🟡 MODE SIMULATION</span>
-                  </span>
-                  <span className="text-[9px] text-acier-400 mt-1 font-mono">
-                    (BD en attente de privilège INSERT)
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Metric Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            
-            {/* KPI 1: Pages Vues */}
-            <div className="bg-gradient-to-br from-acier-50 to-white p-6 rounded-2xl border border-acier-100 flex items-center space-x-4">
-              <div className="p-3 bg-blue-100/60 text-brand-blue rounded-xl">
-                <Eye className="w-6 h-6" />
-              </div>
-              <div>
-                <span className="block text-3xl font-extrabold font-display text-acier-900">
-                  {loadingStats ? "..." : visitStats.totalViews}
-                </span>
-                <span className="text-xs text-acier-500 font-medium font-sans uppercase tracking-wider">
-                  Pages Vues Totales
-                </span>
-              </div>
-            </div>
-
-            {/* KPI 2: Visiteurs Uniques */}
-            <div className="bg-gradient-to-br from-acier-50 to-white p-6 rounded-2xl border border-acier-100 flex items-center space-x-4">
-              <div className="p-3 bg-emerald-100/60 text-emerald-600 rounded-xl">
-                <Users className="w-6 h-6" />
-              </div>
-              <div>
-                <span className="block text-3xl font-extrabold font-display text-acier-900">
-                  {loadingStats ? "..." : visitStats.uniqueVisitors}
-                </span>
-                <span className="text-xs text-acier-500 font-medium font-sans uppercase tracking-wider">
-                  Visiteurs Uniques
-                </span>
-              </div>
-            </div>
-
-            {/* KPI 3: Taux de consultation */}
-            <div className="bg-gradient-to-br from-acier-50 to-white p-6 rounded-2xl border border-acier-100 flex items-center space-x-4 sm:col-span-2 md:col-span-1">
-              <div className="p-3 bg-purple-100/60 text-purple-600 rounded-xl">
-                <Activity className="w-6 h-6" />
-              </div>
-              <div>
-                <span className="block text-3xl font-extrabold font-display text-acier-900">
-                  {loadingStats ? "..." : (visitStats.totalViews > 0 ? (visitStats.totalViews / Math.max(1, visitStats.uniqueVisitors)).toFixed(1) : "0.0")}
-                </span>
-                <span className="text-xs text-acier-500 font-medium font-sans uppercase tracking-wider">
-                  Pages Consultées / Visite
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Detailed Traffic Distribution */}
-          <div className="space-y-4 pt-2">
-            <h3 className="text-sm font-bold text-acier-700 uppercase tracking-wide font-display">
-              Répartition du Trafic par Page
-            </h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4 bg-acier-50/50 p-6 rounded-2xl border border-acier-100">
-              {[
-                { path: "/home", label: "Page d'Accueil" },
-                { path: "/about", label: "À Propos & Histoire" },
-                { path: "/uv", label: "Université de Vacances (UV)" },
-                { path: "/leadership", label: "Bureau National & Fondateurs" },
-                { path: "/statutes", label: "Statuts & Règlements" },
-                { path: "/contact", label: "Contact & Support" }
-              ].map((pageInfo) => {
-                const count = visitStats.pageBreakdown[pageInfo.path] || 0;
-                const percentage = visitStats.totalViews > 0 
-                  ? Math.round((count / visitStats.totalViews) * 100) 
-                  : 0;
-
-                return (
-                  <div key={pageInfo.path} className="space-y-1.5 py-1">
-                    <div className="flex justify-between text-xs font-medium">
-                      <span className="text-acier-800 font-sans">{pageInfo.label}</span>
-                      <span className="text-acier-500 font-mono">
-                        {count} {count > 1 ? "vues" : "vue"} ({percentage}%)
-                      </span>
-                    </div>
-                    
-                    <div className="w-full bg-acier-200/60 h-2 rounded-full overflow-hidden">
-                      <div 
-                        className="bg-brand-blue h-full rounded-full transition-all duration-1000 ease-out"
-                        style={{ width: `${Math.max(3, percentage)}%` }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          
         </div>
       </section>
 
